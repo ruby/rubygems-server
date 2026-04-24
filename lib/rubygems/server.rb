@@ -809,7 +809,8 @@ div.method-source-code pre { color: #ffdead; overflow: hidden; }
       '/gems' => '/cache/',
     }
 
-    @server.mount '/doc_root', RDoc::Servlet, '/doc_root'
+    servlet = defined?(RDoc::Servlet) ? RDoc::Servlet : RDoc::RI::Servlet
+    @server.mount '/doc_root', servlet, '/doc_root'
 
     @gem_dirs.each do |gem_dir|
       file_handlers.each do |mount_point, mount_dir|
