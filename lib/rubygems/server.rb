@@ -449,8 +449,6 @@ div.method-source-code pre { color: #ffdead; overflow: hidden; }
     @spec_dirs.reject! {|spec_dir| !File.directory? spec_dir }
 
     reset_gems
-
-    @have_rdoc_4_plus = nil
   end
 
   def add_date(res)
@@ -466,16 +464,7 @@ div.method-source-code pre { color: #ffdead; overflow: hidden; }
   end
 
   def doc_root(gem_name)
-    if have_rdoc_4_plus?
-      "/doc_root/#{u gem_name}/"
-    else
-      "/doc_root/#{u gem_name}/rdoc/index.html"
-    end
-  end
-
-  def have_rdoc_4_plus?
-    @have_rdoc_4_plus ||=
-      Gem::Requirement.new('>= 4.0.0.preview2').satisfied_by? Gem::RDoc.rdoc_version
+    "/doc_root/#{u gem_name}/"
   end
 
   def latest_specs(req, res)
@@ -820,11 +809,7 @@ div.method-source-code pre { color: #ffdead; overflow: hidden; }
       '/gems' => '/cache/',
     }
 
-    if have_rdoc_4_plus?
-      @server.mount '/doc_root', RDoc::Servlet, '/doc_root'
-    else
-      file_handlers['/doc_root'] = '/doc/'
-    end
+    @server.mount '/doc_root', RDoc::Servlet, '/doc_root'
 
     @gem_dirs.each do |gem_dir|
       file_handlers.each do |mount_point, mount_dir|
